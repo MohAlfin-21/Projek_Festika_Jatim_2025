@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TaTa DuiT — Cash Flow</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+  
+    <nav class="navbar navbar-expand-lg mb-4">
+      <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+          <i class="fas fa-piggy-bank fa-bounce me-2"></i>
+          TaTa<span class="duwit">DuiT</span>
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAlt" aria-controls="navbarNavAlt" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNavAlt">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="manageCatsBtn" title="Kelola Kategori">
+                <i class="fas fa-tags me-1"></i>Kategori
+              </a>
+            </li>
+          </ul>
+          
+          <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mt-lg-0">
+            <button class="btn btn-sm btn-custom" id="downloadJson" title="Download Data">
+              <i class="fas fa-download me-1"></i>JSON
+            </button>
+            <label class="btn btn-sm btn-custom mb-0" for="uploadJson" title="Upload Data">
+              <i class="fas fa-upload me-1"></i>Upload
+            </label>
+            <input type="file" id="uploadJson" accept="application/json" style="display: none" />
+            <button class="btn btn-sm btn-custom" id="resetData" title="Reset Data">
+              <i class="fas fa-undo me-1"></i>Reset
+            </button>
+            <button class="btn btn-sm btn-custom" id="toggleTheme" title="Toggle Tema">
+              <i class="fas fa-moon me-1"></i>Theme
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+
+    <main class="container">
+      <div class="row g-4">
+        
+        <div class="col-lg-4 order-2 order-lg-1">
+          <div class="card p-3">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="small-muted mb-0">Filter & Pencarian</h6>
+                <button class="btn btn-sm btn-outline-light" id="resetFiltersBtn">Reset</button>
+              </div>
+              
+              <input type="hidden" id="categoryFilter" value="">
+
+              <div class="mb-2">
+                <input id="search" class="form-control" placeholder="Cari deskripsi atau nominal..." />
+              </div>
+              <div class="mb-2">
+                <select id="presetFilter" class="form-select">
+                  <option value="all">Semua Transaksi</option>
+                  <option value="today">Hari Ini</option>
+                  <option value="week">7 Hari Terakhir</option>
+                  <option value="month">Bulan Ini</option>
+                  <option value="month3">3 Bulan Terakhir</option>
+                  <option value="year1">1 Tahun Terakhir</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <div class="flex-fill">
+                  <label class="form-label small-muted">Dari Tanggal</label>
+                  <input id="fromDate" type="date" class="form-control" />
+                </div>
+                <div class="flex-fill">
+                  <label class="form-label small-muted">Ke Tanggal</label>
+                  <input id="toDate" type="date" class="form-control" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-3 mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0">Input Cepat</h6>
+              <button class="btn btn-sm btn-outline-light" id="manageQuickAddBtn">Edit</button>
+            </div>
+            <div id="quickAddButtons" class="d-flex flex-wrap gap-2">
+              </div>
+          </div>
+          
+          <div class="card p-3 mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0">Total Anggaran Bulan Ini</h6>
+              <button class="btn btn-sm btn-outline-light" id="editBudgetBtn">Setting</button>
+            </div>
+            <div class="d-flex justify-content-between small-muted mb-1">
+              <span id="budgetUsed">Rp 0</span>
+              <span id="budgetTotal">Rp 0</span>
+            </div>
+            <div class="progress" style="height: 10px;">
+              <div id="budgetProgress" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+            </div>
+            <div class="small-muted mt-1" id="budgetRemaining">Sisa: Rp 0</div>
+          </div>
+
+
+          <div class="card p-3 mt-3">
+            <h6 class="mb-2">Pencapaian & Tips</h6>
+            <div id="badgesArea" class="d-flex flex-column gap-2 mb-2"></div>
+            <div id="insights" class="small-muted"></div>
+          </div>
+        </div>
+
+        <div class="col-lg-8 order-1 order-lg-2">
+          <div class="card p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Daftar Transaksi</h5>
+              <div class="small-muted">Total: <span id="totalAmount">Rp 0</span></div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-borderless table-hover align-middle mb-0">
+                <thead>
+                  <tr class="small-muted">
+                    <th>Deskripsi</th>
+                    <th class="text-end">Jumlah</th>
+                    <th>Kategori</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="expenseTable"></tbody>
+              </table>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="small-muted">Menampilkan <span id="shownCount">0</span> transaksi</div>
+              <nav><ul class="pagination pagination-sm mb-0" id="pagination"></ul></nav>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6>Pengeluaran per Kategori</h6>
+                  <i class="fas fa-info-circle small-muted" 
+                     id="catChartHelp" 
+                     data-bs-toggle="tooltip" 
+                     data-bs-placement="top"
+                     title="Tips: Klik pada irisan chart untuk memfilter transaksi!">
+                  </i>
+                </div>
+                <div class="chart-wrapper"><canvas id="catChart"></canvas></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card p-3">
+                <h6>Tren Harian</h6>
+                <div class="chart-wrapper"><canvas id="trendChart"></canvas></div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="card p-3">
+                <h6>Ringkasan Saat Ini</h6>
+                <div class="row g-2">
+                  <div class="col-md-4">
+                    <div class="small-muted">
+                      Total Tampilan:
+                      <div id="sumFiltered">Rp 0</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="small-muted">
+                      Rata-rata Harian:
+                      <div id="avgFiltered">Rp 0</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="small-muted">
+                      Kategori Teratas:
+                      <div id="topCat">-</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal fade" id="transactionModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+          <h5 class="mb-3" id="transactionModalTitle">Tambah Transaksi</h5>
+          <form id="expenseForm">
+            <input type="hidden" id="editIndex" value="-1" />
+            <div class="mb-2">
+              <label class="form-label small-muted">Deskripsi</label>
+              <input id="desc" class="form-control" required maxlength="120" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label small-muted">Jumlah (Rp)</label>
+              <input id="amount" class="form-control" required inputmode="numeric" pattern="[0-9]*" />
+            </div>
+            <div class="mb-2 d-flex gap-2">
+              <div class="flex-fill">
+                <label class="form-label small-muted">Kategori</label>
+                <div class="input-group">
+                  <select id="category" class="form-select" required></select>
+                  <button class="btn btn-outline-light" type="button" id="addNewCatFromModal">+</button>
+                </div>
+              </div>
+              <div style="width: 120px">
+                <label class="form-label small-muted">Tanggal</label>
+                <input id="date" type="date" class="form-control" required />
+              </div>
+            </div>
+            <div class="d-grid gap-2">
+              <button class="btn btn-accent" id="saveBtn">💾 Simpan</button>
+              <button type="button" class="btn btn-outline-light" id="clearForm">Bersihkan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="categoryBudgetModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+          <h6 class="modal-title">Atur Anggaran Total Bulanan</h6>
+          <hr class="my-2"/>
+          <div class="modal-body p-1">
+            <p class="small-muted">Masukkan total batas anggaran bulanan Anda. Ini akan digunakan untuk melacak lencana "Bulan Hemat".</p>
+            
+            <div class="mt-3">
+              <label class="form-label small-muted">Total Anggaran Bulanan (Rp)</label>
+              <input type="number" class="form-control" id="totalBudgetInput" placeholder="Contoh: 3000000">
+            </div>
+
+          </div>
+          <div class="mt-3 text-end d-flex gap-2">
+            <button class="btn btn-outline-light" data-bs-dismiss="modal">Batal</button>
+            <button class="btn btn-accent" id="saveTotalBudgetBtn">Simpan Anggaran</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal fade" id="quickAddModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+          <h6 class="modal-title">Kelola Input Cepat</h6>
+          <hr class="my-2"/>
+          <form id="quickAddForm" class="d-flex gap-2 mb-3 align-items-end">
+            <div class="flex-fill" style="min-width: 100px;">
+                <label class="form-label small-muted">Deskripsi</label>
+                <input id="qaDesc" class="form-control form-control-sm" placeholder="Cth: Kopi" required>
+            </div>
+            <div style="width: 100px;">
+                <label class="form-label small-muted">Nominal</label>
+                <input id="qaAmount" class="form-control form-control-sm" type="number" placeholder="20000" required>
+            </div>
+            <div class="flex-fill" style="min-width: 100px;">
+                <label class="form-label small-muted">Kategori</label>
+                <select id="qaCategory" class="form-select form-select-sm" required></select>
+            </div>
+            <button class="btn btn-accent btn-sm" type="submit">Tambah</button>
+          </form>
+          <ul id="quickAddList" class="list-group list-group-flush">
+            </ul>
+          <div class="mt-3 text-end">
+            <button class="btn btn-outline-light" data-bs-dismiss="modal">Selesai</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <p class="mb-3">Yakin ingin menghapus transaksi ini?</p>
+            <div class="d-flex gap-2 justify-content-center">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="catsModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content p-3">
+          <h6>Kelola Kategori</h6>
+          <div class="mb-2 d-flex gap-2">
+            <input id="newCat" class="form-control" placeholder="Nama kategori baru" />
+            <button class="btn btn-accent" id="addCatBtn">Tambah</button>
+          </div>
+          <ul id="catList" class="list-group list-group-flush"></ul>
+          <div class="mt-3 text-end"><button class="btn btn-outline-light" data-bs-dismiss="modal">Tutup</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="badgeHistoryModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+          <h6 class="modal-title">Riwayat Lencana</h6>
+          <hr class="my-2"/>
+          <div class="modal-body p-1">
+            <p class="small-muted" id="badgeHistoryIntro">Anda meraih lencana ini pada bulan:</p>
+            <ul id="badgeHistoryList" class="list-group list-group-flush"></ul>
+          </div>
+          <div class="mt-3 text-end">
+            <button class="btn btn-outline-light" data-bs-dismiss="modal">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+      <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">TaTa DuiT</strong>
+          <small class="text-muted">sekarang</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="toastBody">Pesan</div>
+      </div>
+    </div>
+
+    <button class="btn btn-accent fab" id="addTransactionBtn" data-bs-toggle="modal" data-bs-target="#transactionModal">
+      +
+    </button>
+
+    <script src="script.js"></script>
+  </body>
+</html>

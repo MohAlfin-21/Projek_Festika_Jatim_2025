@@ -1,0 +1,859 @@
+/* =========================================
+   ROOT THEME (LIGHT MODE - UPDATED)
+========================================= */
+:root {
+  --accent: #4c8bff;
+  --accent-light: #e7f0ff;
+
+  --bg: #eef2f6;
+
+  --bg-card: #f8fbff;
+
+  --border: #dce4ec;
+
+  --text: #1e1e1e;
+  --text-soft: #6f6f6f;
+}
+
+/* =========================================
+   DARK MODE
+========================================= */
+body.dark {
+  --bg: #121212;
+  --bg-card: #1b1b1b;
+  --border: #333;
+  --text: #e9e9e9;
+  --text-soft: #b9b9b9;
+  --accent-light: #223a63;
+}
+
+/* =========================================
+   GLOBAL
+========================================= */
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: .25s ease;
+  padding-bottom: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text);
+}
+
+.small-muted {
+  color: var(--text-soft);
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+.navbar {
+  background: var(--bg-card);
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  transition: padding .3s, box-shadow .3s;
+}
+
+.navbar-brand {
+  font-size: 22px;
+  color: var(--text) !important;
+  transition: font-size .3s, transform .3s;
+}
+
+/* ANIMASI BARU UNTUK IKON GEAR */
+.navbar-brand .fa-cog {
+  animation: spin 3s linear infinite;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.accent-brand {
+  color: var(--accent);
+}
+
+.navbar.navbar-scrolled {
+  padding: 10px 0;
+  box-shadow: 0 3px 15px rgba(0,0,0,.06);
+}
+
+body.dark .navbar.navbar-scrolled {
+  box-shadow: 0 3px 15px rgba(0,0,0,.3);
+}
+
+.navbar.navbar-scrolled .navbar-brand {
+  font-size: 1.25rem;
+}
+
+.navbar .nav-link {
+  color: var(--text-soft);
+  transition: .3s;
+}
+
+body.dark .nav-link {
+  color: var(--text);
+}
+
+.navbar .nav-link:hover {
+  color: var(--accent) !important;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   BUTTON CUSTOM
+========================================= */
+.btn-custom {
+  border-radius: 20px;
+  font-weight: 500;
+  color: var(--text);
+  border: 1px solid var(--border);
+  transition: .3s;
+}
+
+.btn-custom:hover {
+  background: var(--accent-light);
+  transform: scale(1.05);
+}
+
+body.dark .btn-custom:hover {
+  background: var(--accent-light);
+}
+
+/* =========================================
+   NAVBAR TOGGLER FIX
+========================================= */
+body.dark .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+body.dark .navbar-toggler {
+  border-color: var(--border);
+}
+
+/* =========================================
+   CARD (UPDATED STYLE)
+========================================= */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px !important;
+
+  box-shadow: 0 6px 24px rgba(149, 157, 165, 0.1);
+  transition: all .2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(149, 157, 165, 0.15);
+  border-color: var(--accent);
+}
+
+/* =========================================
+   FORM
+========================================= */
+.form-label {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.form-control,
+.form-select {
+  background: var(--bg-card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.form-control::placeholder {
+  color: var(--text-soft);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+}
+
+.btn-accent:hover {
+  opacity: .9;
+}
+
+/* =========================================
+   QUICK ADD & BUDGET
+========================================= */
+.btn-quick-add {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+body.dark .btn-quick-add {
+  color: var(--text);
+}
+
+.empty-quick-add {
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+  width: 100%;
+}
+
+#quickAddButtons {
+  max-height: 180px;
+  overflow-y: auto;
+  align-content: flex-start;
+  padding-right: 5px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+#quickAddButtons::-webkit-scrollbar {
+  width: 5px;
+}
+
+#quickAddList {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.budget-input-group .form-control {
+  font-size: 14px;
+}
+
+/* =========================================
+   PROGRESS BAR
+========================================= */
+.progress {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.progress-bar {
+  background: var(--accent);
+  transition: width .4s;
+}
+
+.progress-bar.bg-warning {
+  background: #fd7e14 !important;
+}
+
+.progress-bar.bg-danger {
+  background: #dc3545 !important;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+.table {
+  color: var(--text);
+  background: transparent;
+}
+
+.table-responsive {
+  min-height: 470px;
+}
+
+.table > :not(caption) > * > * {
+  background: transparent;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.table thead .small-muted > * {
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.table tbody tr {
+  transition: .15s;
+  cursor: pointer;
+}
+
+.table-hover tbody tr:hover td {
+  background: var(--accent-light);
+  color: var(--text);
+}
+
+.table td {
+  padding: 10px 8px;
+  vertical-align: middle;
+}
+
+.table .btn-outline-light {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.table .btn-outline-light:hover {
+  background: var(--accent-light);
+}
+
+.table .btn-danger {
+  --bs-btn-color: #dc3545;
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: #dc3545;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #dc3545;
+  --bs-btn-hover-border-color: #dc3545;
+  font-weight: 500;
+}
+
+.table-empty-state-container {
+  display: none;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-soft);
+  opacity: 0.7;
+}
+
+.table-empty-state-container i {
+  margin-bottom: 15px;
+  color: var(--border);
+}
+
+body.dark .table-empty-state-container i {
+    color: var(--text-soft);
+}
+
+/* =========================================
+   BADGES
+========================================= */
+.badge-item,
+.badge-locked {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-item {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.badge-locked {
+  border: 1px dashed var(--border);
+  color: var(--text-soft);
+  opacity: .7;
+}
+
+body.dark .badge-item {
+  color: var(--text);
+}
+
+.badge-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-container .btn {
+  border-radius: 20px;
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+/* =========================================
+   CHARTS
+========================================= */
+.chart-wrapper {
+  height: 260px;
+}
+
+#catChart:hover,
+#trendChart:hover {
+  cursor: pointer;
+}
+
+#barChartScrollContainer {
+  width: 100%;
+  height: 250px;
+}
+
+/* =========================================
+   PAGINATION
+========================================= */
+.pagination .page-link {
+  border-radius: 8px !important;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.pagination .page-link:hover {
+  background: var(--accent-light);
+}
+
+/* =========================================
+   MODAL
+========================================= */
+.modal-content {
+  background: var(--bg-card);
+  border-radius: 16px;
+}
+
+#badgeHistoryList {
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+#badgeHistoryList .list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+#badgeHistoryList .small-muted {
+  color: var(--text-soft);
+}
+
+/* =========================================
+   FAB
+========================================= */
+.fab {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  z-index: 1030;
+}
+
+body.dark .fab {
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+}
+
+/* =========================================
+   SEARCH
+========================================= */
+#search {
+  border-radius: 10px;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+*::-webkit-scrollbar {
+  width: 7px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 20px;
+}
+
+/* =========================================
+   UTILITIES
+========================================= */
+.btn-outline-light {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-outline-light:hover {
+  background: var(--accent-light);
+}
+
+.modal .btn-outline-light:hover {
+  border-color: var(--border);
+}
+
+.list-group-item {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.text-success {
+  color: #198754 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+body.dark .text-success {
+  color: #20c997 !important;
+}
+
+body.dark .text-danger {
+  color: #f06574 !important;
+}
+
+[data-bs-toggle="tooltip"] {
+  cursor: help;
+}
+
+/* =========================================
+   TOAST (DARK MODE FIX)
+========================================= */
+body.dark .toast,
+body.dark .toast-header {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+
+body.dark .toast-header {
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+body.dark .toast-header .me-auto {
+  color: var(--text) !important;
+}
+
+body.dark .toast-header .text-muted {
+  color: var(--text-soft) !important;
+}
+
+body.dark .toast-body {
+  color: var(--text);
+}
+
+body.dark .toast-header .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* =========================================
+   REMINDER
+========================================= */
+.reminder-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: var(--text);
+}
+
+.reminder-item.urgent {
+  border-left: 4px solid #dc3545;
+}
+
+.reminder-item.warning {
+  border-left: 4px solid #fd7e14;
+}
+
+#reminderList {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* =========================================
+   DYNAMIC CHART LAYOUT
+========================================= */
+#hideDonutChartBtn,
+#hideLineChartBtn {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 12px;
+}
+
+#categoryChartArea {
+  gap: 15px;
+}
+
+#categoryChartArea .chart-wrapper {
+  min-width: 0;
+}
+
+/* =========================================
+   ANIMASI GEAR (BARU)
+========================================= */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================
+   FOOTER STYLE (MODIFIED)
+========================================= */
+.footer {
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border);
+  color: var(--text);
+}
+
+.footer-link {
+  color: var(--text-soft);
+  text-decoration: none;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+
+.footer-link:hover {
+  color: var(--accent);
+  padding-left: 3px;
+}
+
+.footer-card {
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  margin-bottom: 0.5rem; 
+}
+
+.footer-icon-box {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.dark .footer-icon-box {
+  color: var(--text);
+}
+
+/* =========================================
+   HISTORY TIMELINE STYLE (NO HOVER)
+========================================= */
+#reminderHistoryList .list-group-item {
+  border-left: 3px solid var(--border);
+  margin-bottom: 8px;
+  background: var(--bg-card);
+}
+
+.history-arrow {
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  margin: 0 6px;
+}
+
+/* =========================================
+   FIX DARK MODE: REMINDER HISTORY & ALERTS
+========================================= */
+body.dark .alert-secondary {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+body.dark .alert-secondary .text-muted,
+body.dark .alert-secondary .small-muted {
+  color: var(--text-soft) !important;
+}
+
+body.dark .alert-light {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+body.dark .alert-light .small-muted {
+  color: var(--text-soft) !important;
+}
+
+body.dark .bg-light {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+body.dark #btnBackFromHistory {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+body.dark #btnBackFromHistory:hover {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* =========================================
+   REAL-TIME TUTORIAL ENGINE
+========================================= */
+
+body.tour-active {
+    overflow: hidden !important;
+}
+
+#tour-focus-ring {
+    position: fixed;
+    z-index: 9998;
+    border: 2px dashed #ffc107;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75);
+    border-radius: 8px;
+    pointer-events: none;
+    display: none;
+    transition: none !important; 
+}
+
+#tour-tooltip {
+    position: fixed;
+    z-index: 9999;
+    width: 300px;
+    background: #fff;
+    color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    display: none;
+    border: 1px solid #ddd;
+}
+
+#tour-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 20px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+}
+
+.tour-target-active {
+    position: relative !important;
+    z-index: 9998 !important; 
+    pointer-events: auto !important;
+}
+
+.tour-target-fixed {
+    z-index: 9998 !important;
+}
+
+body.dark #tour-tooltip { background: #1b1b1b; color: #fff; border-color: #444; }
+body.dark #tour-tooltip::after { border-color: #1b1b1b transparent transparent transparent; }
+
+/* =========================================
+   RESPONSIVE TOUR FIXES
+========================================= */
+
+@media (max-width: 768px) {
+    #tour-tooltip {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        right: 20px !important;
+        width: auto !important;
+        transform: none !important;
+        z-index: 10000 !important;
+    }
+
+    #tour-tooltip::after {
+        display: none; 
+    }
+
+    #tour-focus-ring {
+        transition: all 0.1s linear !important;
+    }
+    
+    .navbar-collapse.show {
+        position: relative;
+        z-index: 10001;
+        background: var(--bg-card);
+    }
+}
+
+/* =========================================
+   TAMPILAN TOMBOL AKSI & ICON
+========================================= */
+
+/* Styling Kolom Aksi */
+.table .action-cell {
+  white-space: nowrap;
+  text-align: end;
+}
+
+/* Styling Tombol Icon Bulat */
+.btn-icon-only {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-left: 4px;
+}
+
+/* Tombol Edit (Biru) */
+.btn-icon-only.btn-outline-primary {
+  color: var(--accent);
+  background-color: rgba(76, 139, 255, 0.1); 
+  border: 1px solid transparent;
+}
+.btn-icon-only.btn-outline-primary:hover {
+  background-color: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(76, 139, 255, 0.3);
+}
+
+/* Tombol Hapus (Merah) */
+.btn-icon-only.btn-outline-danger {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1); 
+  border: 1px solid transparent;
+}
+.btn-icon-only.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+}
+
+/* Arrow Fallback */
+.fa-chevron-right {
+    color: var(--accent);
+    opacity: 0.8;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+tr:hover .fa-chevron-right {
+    transform: translateX(3px);
+    color: var(--text);
+}
+
+/* =========================================
+   FIX DARK MODE VISIBILITY (TEKS MODAL)
+========================================= */
+/* 1. Memperbaiki semua teks .text-muted di Dark Mode */
+body.dark .text-muted {
+    color: var(--text-soft) !important;
+}
+
+/* 2. Khusus untuk Deskripsi di Modal Transaksi agar lebih kontras */
+body.dark #rowActionDesc {
+    color: #e0e0e0 !important; /* Abu terang hampir putih */
+    font-weight: 500;
+}
+
+/* 3. Agar angka Rupiah di modal tetap menonjol */
+body.dark #rowActionAmount {
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
