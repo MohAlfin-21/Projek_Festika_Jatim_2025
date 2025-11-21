@@ -27,7 +27,7 @@ let deleteId = null;
 let PER_PAGE = 8; let currentPage = 1;
 
 // Instance Modal Bootstrap
-let rowActionModalInstance = new bootstrap.Modal(document.getElementById('rowActionModal'));
+let rowActionModalInstance = null; // Diinisialisasi nanti dalam $(function)
 let transactionModal = null; 
 let categoryBudgetModal = null;
 let quickAddModal = null;
@@ -124,6 +124,8 @@ function stringToHslColor(str, s = 70, l = 50) {
 
 // ========== Init UI ============
 $(function(){
+  // Inisialisasi modal instance di sini
+  rowActionModalInstance = new bootstrap.Modal(document.getElementById('rowActionModal'));
   transactionModal = new bootstrap.Modal(document.getElementById('transactionModal'));
   categoryBudgetModal = new bootstrap.Modal(document.getElementById('categoryBudgetModal'));
   quickAddModal = new bootstrap.Modal(document.getElementById('quickAddModal'));
@@ -1040,11 +1042,14 @@ $('#expenseForm').on('submit', function(e){
   updateBadges();
 });
 
-// --- LOGIKA AUTO-UPDATE DARI TRANSAKSI (DENGAN HISTORY) ---
+// =========================================
+// UPDATE: LOGIKA REMINDER OTOMATIS DENGAN MODAL CANTIK
+// =========================================
 function checkAndExtendReminder(category, vehicleName, entryDate) {
     const today = new Date(entryDate + 'T12:00:00'); 
     const todayStr = today.toISOString().slice(0, 10);
     
+    // 1. LOGIKA GANTI OLI
     if (category.toLowerCase().includes('ganti oli')) {
         const vehicleData = vehicles.find(v => v.name === vehicleName);
         if (!vehicleData) return; 
@@ -1054,74 +1059,111 @@ function checkAndExtendReminder(category, vehicleName, entryDate) {
         newDate.setMonth(newDate.getMonth() + intervalMonths);
         const newDueDateStr = newDate.toISOString().slice(0, 10);
 
-        if (confirm(`Anda mencatat "Ganti Oli" untuk ${vehicleName}.\n\nAtur reminder Ganti Oli berikutnya ke ${newDueDateStr} (${intervalMonths} bulan dari hari ini)?`)) {
-            const existing = reminders.find(r => r.vehicleName === vehicleName && r.name.toLowerCase().includes('ganti oli'));
-            
-            if (existing) {
-                // LOG HISTORY
-                if(!existing.history) existing.history = [];
-                existing.history.push({
-                    date: todayStr,
-                    action: "Update dari Transaksi",
-                    from: existing.dueDate,
-                    to: newDueDateStr
-                });
-                existing.dueDate = newDueDateStr;
-            } else {
-                reminders.push({ 
-                    id: Date.now(), 
-                    vehicleName, 
-                    name: "Ganti Oli", 
-                    dueDate: newDueDateStr,
-                    history: [{ date: todayStr, action: "Pembuatan Otomatis", from: "-", to: newDueDateStr }]
-                });
+        // MENGGUNAKAN MODAL KUSTOM (BUKAN POPUP BROWSER)
+        showCustomConfirm(
+            'Auto-Reminder Ganti Oli', // Judul
+            `<div class="text-start">
+                <p class="mb-2">Anda mencatat <strong>Ganti Oli</strong> untuk <span class="text-primary">${vehicleName}</span>.</p>
+                <p class="mb-0">Atur reminder berikutnya ke tanggal <strong>${newDueDateStr}</strong>?</p>
+                <small class="text-muted fst-italic">(${intervalMonths} bulan dari tanggal transaksi)</small>
+             </div>`, 
+            'Ya, Atur Reminder', // Teks Tombol
+            false, // Bukan tombol merah (Destructive = false)
+            (confirmed) => {
+                if (confirmed) {
+                    const existing = reminders.find(r => r.vehicleName === vehicleName && r.name.toLowerCase().includes('ganti oli'));
+                    
+                    if (existing) {
+                        // LOG HISTORY
+                        if(!existing.history) existing.history = [];
+                        existing.history.push({
+                            date: todayStr,
+                            action: "Update dari Transaksi",
+                            from: existing.dueDate,
+                            to: newDueDateStr
+                        });
+                        existing.dueDate = newDueDateStr;
+                    } else {
+                        reminders.push({ 
+                            id: Date.now(), 
+                            vehicleName, 
+                            name: "Ganti Oli", 
+                            dueDate: newDueDateStr,
+                            history: [{ date: todayStr, action: "Pembuatan Otomatis", from: "-", to: newDueDateStr }]
+                        });
+                    }
+                    saveReminders();
+                    renderReminders();
+                    showToast('Reminder Ganti Oli diperbarui!');
+                }
             }
-            saveReminders();
-            renderReminders();
-            showToast('Reminder Ganti Oli diperbarui!');
-        }
+        );
     }
+    // 2. LOGIKA PAJAK
     else if (category.toLowerCase().includes('pajak')) {
         const existingPajak1Thn = reminders.find(r => r.vehicleName === vehicleName && r.name.toLowerCase().includes('pajak tahunan'));
         const existingPajak5Thn = reminders.find(r => r.vehicleName === vehicleName && (r.name.toLowerCase().includes('ganti plat') || r.name.toLowerCase().includes('pajak 5 tahunan')) );
         
-        // Logika Pajak 5 Tahunan
+        let handled = false;
+
+        // A. Cek Pajak 5 Tahunan
         if (existingPajak5Thn && existingPajak5Thn.dueDate && getDaysDifference(existingPajak5Thn.dueDate) <= 45) {
              const newDate5Str = calculateNextTaxDate(existingPajak5Thn.dueDate, 5);
              
-             if (newDate5Str && confirm(`Perpanjang "Pajak 5 Tahunan" ke ${newDate5Str}?`)) {
-                 if(!existingPajak5Thn.history) existingPajak5Thn.history = [];
-                 existingPajak5Thn.history.push({
-                    date: todayStr,
-                    action: "Update dari Transaksi (Pajak)",
-                    from: existingPajak5Thn.dueDate,
-                    to: newDate5Str
-                 });
-
-                 existingPajak5Thn.dueDate = newDate5Str;
-                 showToast('Reminder Pajak 5 Thn diperbarui!');
+             if (newDate5Str) {
+                 handled = true;
+                 showCustomConfirm(
+                    'Perpanjang Pajak 5 Tahunan',
+                    `Jatuh tempo Pajak 5 Tahunan/Ganti Plat terdeteksi dekat.<br>Perpanjang otomatis ke tanggal <strong>${newDate5Str}</strong>?`,
+                    'Perpanjang',
+                    false,
+                    (confirmed) => {
+                        if (confirmed) {
+                             if(!existingPajak5Thn.history) existingPajak5Thn.history = [];
+                             existingPajak5Thn.history.push({
+                                date: todayStr,
+                                action: "Update dari Transaksi (Pajak)",
+                                from: existingPajak5Thn.dueDate,
+                                to: newDate5Str
+                             });
+                             existingPajak5Thn.dueDate = newDate5Str;
+                             saveReminders();
+                             renderReminders();
+                             showToast('Reminder Pajak 5 Thn diperbarui!');
+                        }
+                    }
+                 );
              }
         } 
         
-        // Logika Pajak 1 Tahunan
-        if (existingPajak1Thn && existingPajak1Thn.dueDate && getDaysDifference(existingPajak1Thn.dueDate) <= 45) {
+        // B. Cek Pajak 1 Tahunan (Hanya jika 5 tahunan tidak diproses agar popup tidak bentrok)
+        if (!handled && existingPajak1Thn && existingPajak1Thn.dueDate && getDaysDifference(existingPajak1Thn.dueDate) <= 45) {
              const newDate1Str = calculateNextTaxDate(existingPajak1Thn.dueDate, 1);
              
-             if (newDate1Str && confirm(`Perpanjang "Pajak Tahunan" ke ${newDate1Str}?`)) {
-                 if(!existingPajak1Thn.history) existingPajak1Thn.history = [];
-                 existingPajak1Thn.history.push({
-                    date: todayStr,
-                    action: "Update dari Transaksi (Pajak)",
-                    from: existingPajak1Thn.dueDate,
-                    to: newDate1Str
-                 });
-
-                 existingPajak1Thn.dueDate = newDate1Str;
-                 showToast('Reminder Pajak Tahunan diperbarui!');
+             if (newDate1Str) {
+                 showCustomConfirm(
+                    'Perpanjang Pajak Tahunan',
+                    `Jatuh tempo Pajak Tahunan terdeteksi dekat.<br>Perpanjang otomatis ke tanggal <strong>${newDate1Str}</strong>?`,
+                    'Perpanjang',
+                    false,
+                    (confirmed) => {
+                        if (confirmed) {
+                             if(!existingPajak1Thn.history) existingPajak1Thn.history = [];
+                             existingPajak1Thn.history.push({
+                                date: todayStr,
+                                action: "Update dari Transaksi (Pajak)",
+                                from: existingPajak1Thn.dueDate,
+                                to: newDate1Str
+                             });
+                             existingPajak1Thn.dueDate = newDate1Str;
+                             saveReminders();
+                             renderReminders();
+                             showToast('Reminder Pajak Tahunan diperbarui!');
+                        }
+                    }
+                 );
              }
         }
-        saveReminders();
-        renderReminders();
     }
 }
 
@@ -2053,68 +2095,35 @@ $(document).ready(function() {
     });
 });
 
+// =========================================
+// FIX: FUNGSI ROW ACTION (TANPA DUPLIKASI)
+// =========================================
 
-// Variable global untuk instance modal baru
-let rowActionModal = null;
+// Catatan: rowActionModalInstance sudah di-define di awal file script.js (baris 33)
+// Jadi kita tidak perlu 'new bootstrap.Modal' lagi di sini.
 
-// Inisialisasi di dalam $(function(){ ... })
-$(function(){
-    // ... kode existing ...
-    rowActionModal = new bootstrap.Modal(document.getElementById('rowActionModal'));
-    // ... kode existing ...
-});
-
-// FUNGSI BARU: Menangani klik pada baris tabel
 window.openRowAction = function(id) {
     const item = expenses.find(x => x.id === id);
     if (!item) return;
 
-    // 1. Isi data ke dalam modal menu
-    $('#rowActionTitle').text(item.vehicle); // Judul pakai nama kendaraan
+    // 1. Isi data ke dalam Modal
+    $('#rowActionTitle').text(item.vehicle || 'Detail Transaksi');
     $('#rowActionAmount').text('Rp ' + formatRupiah(item.amount));
     $('#rowActionDesc').text(item.desc + ' (' + item.category + ')');
     $('#rowActionDate').text(item.date);
 
     // 2. Atur fungsi tombol Edit
     $('#btnActionEdit').off('click').on('click', function() {
-        rowActionModal.hide();
-        // Beri sedikit jeda agar animasi modal selesai
+        rowActionModalInstance.hide();
         setTimeout(() => { editExpense(id); }, 200);
     });
 
     // 3. Atur fungsi tombol Hapus
     $('#btnActionDelete').off('click').on('click', function() {
-        rowActionModal.hide();
+        rowActionModalInstance.hide();
         setTimeout(() => { askDelete(id); }, 200);
     });
 
-    // 4. Tampilkan Modal
-    rowActionModal.show();
-}
-
-// FUNGSI BARU: Menangani Klik pada Baris Tabel
-window.openRowAction = function(id) {
-    // 1. Cari data berdasarkan ID
-    const item = expenses.find(x => x.id === id);
-    if (!item) return;
-
-    // 2. Isi data ke dalam Modal Menu
-    $('#rowActionAmount').text('Rp ' + formatRupiah(item.amount));
-    $('#rowActionDesc').text(item.desc + ' (' + item.vehicle + ')');
-
-    // 3. Siapkan Tombol Edit (Panggil fungsi editExpense yang sudah ada)
-    $('#btnActionEdit').off('click').on('click', function() {
-        rowActionModalInstance.hide();
-        // Beri jeda sedikit agar transisi modal halus
-        setTimeout(() => { editExpense(id); }, 300);
-    });
-
-    // 4. Siapkan Tombol Hapus (Panggil fungsi askDelete yang sudah ada)
-    $('#btnActionDelete').off('click').on('click', function() {
-        rowActionModalInstance.hide();
-        setTimeout(() => { askDelete(id); }, 300);
-    });
-
-    // 5. Tampilkan Modal
+    // 4. Tampilkan Modal menggunakan instance yang benar
     rowActionModalInstance.show();
 }

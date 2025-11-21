@@ -4,13 +4,9 @@
 :root {
   --accent: #4c8bff;
   --accent-light: #e7f0ff;
-
   --bg: #eef2f6;
-
   --bg-card: #f8fbff;
-
   --border: #dce4ec;
-
   --text: #1e1e1e;
   --text-soft: #6f6f6f;
 }
@@ -67,7 +63,6 @@ h1, h2, h3, h4, h5, h6 {
   transition: font-size .3s, transform .3s;
 }
 
-/* ANIMASI BARU UNTUK IKON GEAR */
 .navbar-brand .fa-cog {
   animation: spin 3s linear infinite;
 }
@@ -145,7 +140,6 @@ body.dark .navbar-toggler {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px !important;
-
   box-shadow: 0 6px 24px rgba(149, 157, 165, 0.1);
   transition: all .2s ease-in-out;
 }
@@ -782,13 +776,11 @@ body.dark #tour-tooltip::after { border-color: #1b1b1b transparent transparent t
    TAMPILAN TOMBOL AKSI & ICON
 ========================================= */
 
-/* Styling Kolom Aksi */
 .table .action-cell {
   white-space: nowrap;
   text-align: end;
 }
 
-/* Styling Tombol Icon Bulat */
 .btn-icon-only {
   width: 32px;
   height: 32px;
@@ -801,7 +793,6 @@ body.dark #tour-tooltip::after { border-color: #1b1b1b transparent transparent t
   margin-left: 4px;
 }
 
-/* Tombol Edit (Biru) */
 .btn-icon-only.btn-outline-primary {
   color: var(--accent);
   background-color: rgba(76, 139, 255, 0.1); 
@@ -814,7 +805,6 @@ body.dark #tour-tooltip::after { border-color: #1b1b1b transparent transparent t
   box-shadow: 0 4px 10px rgba(76, 139, 255, 0.3);
 }
 
-/* Tombol Hapus (Merah) */
 .btn-icon-only.btn-outline-danger {
   color: #dc3545;
   background-color: rgba(220, 53, 69, 0.1); 
@@ -827,7 +817,6 @@ body.dark #tour-tooltip::after { border-color: #1b1b1b transparent transparent t
   box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
 }
 
-/* Arrow Fallback */
 .fa-chevron-right {
     color: var(--accent);
     opacity: 0.8;
@@ -842,18 +831,41 @@ tr:hover .fa-chevron-right {
 /* =========================================
    FIX DARK MODE VISIBILITY (TEKS MODAL)
 ========================================= */
-/* 1. Memperbaiki semua teks .text-muted di Dark Mode */
 body.dark .text-muted {
     color: var(--text-soft) !important;
 }
 
-/* 2. Khusus untuk Deskripsi di Modal Transaksi agar lebih kontras */
 body.dark #rowActionDesc {
-    color: #e0e0e0 !important; /* Abu terang hampir putih */
+    color: #e0e0e0 !important;
     font-weight: 500;
 }
 
-/* 3. Agar angka Rupiah di modal tetap menonjol */
 body.dark #rowActionAmount {
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+/* FIX: Tombol Close Modal di Dark Mode */
+body.dark .modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* =========================================
+   HIGHLIGHT HALAMAN AKTIF (PAGINATION)
+========================================= */
+
+/* Warna tombol saat aktif (Halaman saat ini) */
+.pagination .page-item.active .page-link {
+  background-color: var(--accent) !important; /* Warna Biru Utama */
+  border-color: var(--accent) !important;
+  color: #ffffff !important; /* Teks Putih */
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(76, 139, 255, 0.4); /* Efek bayangan bersinar */
+  transform: translateY(-2px); /* Sedikit naik agar menonjol */
+}
+
+/* Pastikan hover pada tombol aktif tidak mengubah warna aneh */
+.pagination .page-item.active .page-link:hover {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+  opacity: 0.9;
 }

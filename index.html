@@ -31,32 +31,32 @@
       </div>
     </div>
 
-    <div class="modal fade" id="rowActionModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header border-0 pb-0">
-        <h6 class="modal-title fw-bold" id="rowActionTitle">Detail Transaksi</h6>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center pt-2">
-        <div class="mb-4">
-          <div id="rowActionAmount" class="h4 fw-bold text-primary mb-1"></div>
-          <div id="rowActionDesc" class="text-muted small"></div>
-          <div id="rowActionDate" class="badge bg-light text-dark border mt-2"></div>
-        </div>
+    <div class="modal fade" id="rowActionModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header border-0 pb-0">
+            <h6 class="modal-title fw-bold" id="rowActionTitle">Detail Transaksi</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center pt-2">
+            <div class="mb-4">
+              <div id="rowActionAmount" class="h4 fw-bold text-primary mb-1"></div>
+              <div id="rowActionDesc" class="text-muted small"></div>
+              <div id="rowActionDate" class="badge bg-light text-dark border mt-2"></div>
+            </div>
 
-        <div class="d-grid gap-2">
-          <button id="btnActionEdit" class="btn btn-outline-primary py-2">
-            <i class="fa-solid fa-pen me-2"></i> Edit Data
-          </button>
-          <button id="btnActionDelete" class="btn btn-outline-danger py-2">
-            <i class="fa-solid fa-trash me-2"></i> Hapus Data
-          </button>
+            <div class="d-grid gap-2">
+              <button id="btnActionEdit" class="btn btn-outline-primary py-2">
+                <i class="fa-solid fa-pen me-2"></i> Edit Data
+              </button>
+              <button id="btnActionDelete" class="btn btn-outline-danger py-2">
+                <i class="fa-solid fa-trash me-2"></i> Hapus Data
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
     <div class="modal fade" id="renameModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
@@ -624,50 +624,22 @@
       +
     </button>
     
-<div id="tour-focus-ring"></div>
-
-<div id="tour-tooltip">
-  <div class="d-flex justify-content-between align-items-center mb-2">
-      <h6 id="tour-title" class="fw-bold mb-0">Judul</h6>
-      <span id="tour-step-count" class="badge bg-secondary" style="font-size: 0.7rem;">1/5</span>
-  </div>
-  <p id="tour-desc" class="small-muted mb-3" style="line-height: 1.4;">Penjelasan...</p>
-  
-  <div class="d-flex justify-content-between mt-3">
-    <button class="btn btn-sm btn-link text-decoration-none text-muted px-0" id="tour-skip">Lewati</button>
-    <div>
-        <button class="btn btn-sm btn-outline-secondary me-1" id="tour-prev">Back</button>
-        <button class="btn btn-sm btn-accent" id="tour-next">Lanjut</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="rowActionModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header border-0 pb-0 justify-content-end">
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div id="tour-focus-ring"></div>
+    <div id="tour-tooltip">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 id="tour-title" class="fw-bold mb-0">Judul</h6>
+          <span id="tour-step-count" class="badge bg-secondary" style="font-size: 0.7rem;">1/5</span>
       </div>
-      <div class="modal-body text-center pt-0 pb-4">
-        
-        <h5 id="rowActionAmount" class="fw-bold text-primary mb-1">Rp 0</h5>
-        <p id="rowActionDesc" class="text-muted small mb-3">Deskripsi Transaksi</p>
-        
-        <hr class="opacity-25 mx-auto w-50 my-3">
-
-        <div class="d-grid gap-2 px-3">
-          <button id="btnActionEdit" class="btn btn-outline-primary">
-            <i class="fa-solid fa-pen me-2"></i> Edit
-          </button>
-          <button id="btnActionDelete" class="btn btn-outline-danger">
-            <i class="fa-solid fa-trash me-2"></i> Hapus
-          </button>
+      <p id="tour-desc" class="small-muted mb-3" style="line-height: 1.4;">Penjelasan...</p>
+      
+      <div class="d-flex justify-content-between mt-3">
+        <button class="btn btn-sm btn-link text-decoration-none text-muted px-0" id="tour-skip">Lewati</button>
+        <div>
+            <button class="btn btn-sm btn-outline-secondary me-1" id="tour-prev">Back</button>
+            <button class="btn btn-sm btn-accent" id="tour-next">Lanjut</button>
         </div>
-
       </div>
     </div>
-  </div>
-</div>
 
     <script src="script.js"></script>
 
