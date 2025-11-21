@@ -1642,7 +1642,7 @@ $('#downloadJson').on('click', ()=>{
   const data = {expenses, categories, badges, badgeHistory, totalBudget, quickAddItems, vehicles, reminders, meta:{exportedAt: new Date().toISOString()}};
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download = 'samsatbudget_backup_'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  const a = document.createElement('a'); a.href=url; a.download = 'ArtoMojo_backup_'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 });
 $('#uploadJson').on('change', function(e){
   const file = this.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = function(ev){
